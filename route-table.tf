@@ -65,7 +65,7 @@ resource "aws_route_table" "private-rt" {
 
 
 # Attach the route table to public subnets
-resource "aws_route_table_association" "pub-rt-association" {
+resource "aws_route_table_association" "pub-rt-associations" {
   count          = length(aws_subnet.public.*.id) 
   subnet_id      = element(aws_subnet.public.*.id, count.index)
   route_table_id = aws_route_table.public-rt.id
@@ -98,9 +98,9 @@ resource "aws_route_table_association" "pub-rt-association" {
 # }
 
 
-# # Adding the Route in Default VPC Route Table ( which is the peering connection to robot vpc)
-# resource "aws_route" "r" {
-#   route_table_id            = var.DEFAULT_VPC_RT
-#   destination_cidr_block    = var.VPC_CIDR
-#   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id 
-# }
+# Adding the Route in Default VPC Route Table ( which is the peering connection to robot vpc)
+resource "aws_route" "r" {
+  route_table_id            = var.DEFAULT_VPC_RT
+  destination_cidr_block    = var.VPC_CIDR
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id 
+}
